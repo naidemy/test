@@ -24,7 +24,8 @@ body {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  /* центрирование по вертикали с помощью flex */
+  /* позволяем блоку занимать оставшееся пространство окна */
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,6 +82,10 @@ body {
   background: #c0c0c0;
   border: 2px solid black;
   box-shadow: 4px 4px 0 black;
+  /* превращаем окно в flex-контейнер, чтобы контент можно было
+     растянуть на всю высоту и легко центрировать */
+  display: flex;
+  flex-direction: column;
 }
 
 .titlebar {
@@ -118,6 +123,7 @@ button {
     text-align: center;
     font-size: 22px;
     font-weight: bold;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
