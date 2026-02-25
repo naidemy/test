@@ -78,11 +78,14 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   popup.style.left = baseLeft + offset + "px";
   popup.style.top = baseTop + offset + "px";
 
-  popup.innerHTML = `
-    <div class="titlebar">
+  // если это финальное окно, скрываем крестик
+  const titleBar = `<div class="titlebar">
       SYSTEM ERROR
-      <span class="close">✖</span>
-    </div>
+      ${isFinal ? "" : "<span class=\"close\">✖</span>"}
+    </div>`;
+
+  popup.innerHTML = `
+    ${titleBar}
     <div class="content">${content}</div>
   `;
 
@@ -114,25 +117,28 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   // оставляем заглушку переменной на случай дальнейших доработок
   let moveInterval;
 
-  popup.querySelector(".close").onclick = () => {
-    errorSound.play();
-    shakeScreen();
+  const closeBtn = popup.querySelector(".close");
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      errorSound.play();
+      shakeScreen();
 
-    if (stubborn && !stubbornWindowClosed) {
-      popup.querySelector(".content").innerHTML =
-        "ЭТО ОКНО НЕЛЬЗЯ ЗАКРЫТЬ 😈";
-      stubbornWindowClosed = true;
-      return;
-    }
+      if (stubborn && !stubbornWindowClosed) {
+        popup.querySelector(".content").innerHTML =
+          "ЭТО ОКНО НЕЛЬЗЯ ЗАКРЫТЬ 😈";
+        stubbornWindowClosed = true;
+        return;
+      }
 
-    // никаких интервалов больше не запущено
-    popup.remove();
+      // никаких интервалов больше не запущено
+      popup.remove();
 
-    if (!isFinal) {
-      openWindows--;
-      checkIfDone();
-    }
-  };
+      if (!isFinal) {
+        openWindows--;
+        checkIfDone();
+      }
+    };
+  }
 
   if (isFinal) {
     popup.querySelector("#prizeBtn").onclick = openVideo;
