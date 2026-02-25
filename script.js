@@ -42,11 +42,9 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   const finalH = Math.min(window.innerHeight * 0.5, 200);
 
   if (isFinal) {
-    // финальное окно чуть больше и по центру
     width = finalW;
     height = finalH;
   } else {
-    // остальные не мельче финального, чтобы гарантированно его закрывать
     width = Math.max(width, finalW);
     height = Math.max(height, finalH);
   }
@@ -54,28 +52,18 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   popup.style.width = width + "px";
   popup.style.height = height + "px";
 
-  // позиционирование: все окна лежат одно на другом, с небольшим смещением
   const baseLeft = (window.innerWidth - width) / 2;
   const baseTop = (window.innerHeight - height) / 2;
-  const offset = order * 6; // смещение между окнами
+  // при малой ширине экрана используем меньший шаг, чтобы стопка не вылезала
+  const step = window.innerWidth < 600 ? 4 : 6;
+  const offset = order * step;
 
-  popup.style.left = baseLeft + offset + "px";
-  popup.style.top = baseTop + offset + "px";
-
-  // z‑ индекс: финальное – самое низкое, остальные нарастают
-  if (isFinal) {
-    popup.style.zIndex = 1000;
-  } else {
-    popup.style.zIndex = 1000 + order + 1;
-  }
-
+  // подготовка содержимого
   let content = text;
-
   if (!isFinal) {
     const fakeTimer = Math.floor(Math.random() * 10) + 5;
     content += `<br><br>Удаление через ${fakeTimer} сек...`;
   }
-
   if (isFinal) {
     content = `
       🎉 Система успешно очищена! 🎉
@@ -83,6 +71,9 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
       <button id="prizeBtn">🎁 Жми и получи приз!</button>
     `;
   }
+
+  popup.style.left = baseLeft + offset + "px";
+  popup.style.top = baseTop + offset + "px";
 
   popup.innerHTML = `
     <div class="titlebar">
@@ -93,6 +84,24 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   `;
 
   document.body.appendChild(popup);
+
+  const rect = popup.getBoundingClientRect();
+  const actualW = rect.width;
+  const actualH = rect.height;
+  let finalLeft = (window.innerWidth - actualW) / 2 + offset;
+  let finalTop = (window.innerHeight - actualH) / 2 + offset;
+  finalLeft = Math.max(finalLeft, 0);
+  finalTop = Math.max(finalTop, 0);
+  finalLeft = Math.min(finalLeft, window.innerWidth - actualW);
+  finalTop = Math.min(finalTop, window.innerHeight - actualH);
+  popup.style.left = finalLeft + "px";
+  popup.style.top = finalTop + "px";
+
+  if (isFinal) {
+    popup.style.zIndex = 1000;
+  } else {
+    popup.style.zIndex = 1000 + order + 1;
+  }
 
   if (!isFinal) openWindows++;
 

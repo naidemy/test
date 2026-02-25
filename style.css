@@ -45,7 +45,10 @@ button {
   background: black;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* чуть сдвигаем вниз при помощи паддинга, чтобы не прижималось к верхушке
+     (на некоторых мобилах 100vh с учётом адресной строки всё ещё чуть выше) */
+  align-items: flex-start;
+  padding-top: 10vh;
   z-index: 9999; /* поверх всех всплывашек */
 }
 
@@ -91,12 +94,13 @@ button {
 /* адаптация для телефона */
 @media (max-width: 600px) {
   body {
-    overflow: auto; /* на случай, если окна выходят за пределы */
+    overflow: hidden; /* запретим прокрутку, окна будут полностью видны */
   }
 
   .popup {
-    width: 90vw !important;
-    max-width: 90vw;
+    width: 95vw !important;
+    max-width: 95vw;
+    height: 75vh !important;      /* чуть меньше, чтобы учесть смещение */
     box-sizing: border-box;
     font-size: 14px;
   }
