@@ -21,6 +21,14 @@ body {
 
 .content {
   padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  /* центрирование по вертикали с помощью flex */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 button {
@@ -107,6 +115,13 @@ button {
 
   .content {
     padding: 8px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 
