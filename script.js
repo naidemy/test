@@ -32,14 +32,17 @@ function createPopup(text, isFinal = false, stubborn = false, order = 0) {
   popup.className = "popup";
 
   // размеры подстраиваются под экран (проценты для телефонов)
-  let width = 200 + Math.random() * 250;
-  let height = 120 + Math.random() * 150;
+  // базовые случайные значения увеличены втрое для заметного роста
+  let width = (200 + Math.random() * 250) * 3;
+  let height = (120 + Math.random() * 150) * 3;
+  // но ни в коем случае не больше доступного пространства
   width = Math.min(width, window.innerWidth * 0.9);
   height = Math.min(height, window.innerHeight * 0.6);
 
   // габариты итогового окна, чтобы накрыло его остальных
-  const finalW = Math.min(window.innerWidth * 0.8, 300);
-  const finalH = Math.min(window.innerHeight * 0.5, 200);
+  // итоговое окно тоже увеличено, но будет ограничено размерами экрана
+  const finalW = Math.min(window.innerWidth * 0.8, 300 * 3);
+  const finalH = Math.min(window.innerHeight * 0.5, 200 * 3);
 
   if (isFinal) {
     width = finalW;
